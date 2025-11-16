@@ -1,5 +1,4 @@
 import sqlite3
-import os
 
 # Paths to database file held in data
 db_path = "data/SafePass_database.db"

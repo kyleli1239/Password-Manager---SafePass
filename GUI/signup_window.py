@@ -1,5 +1,8 @@
 from tkinter import *
 from tkinter import messagebox
+from core.authentication import save_master_password
+from GUI.login_window import login_page
+
 
 def signup_page(root):
     root.title("SafePass - Signup Page")
@@ -8,13 +11,28 @@ def signup_page(root):
     Label(root, text="Create New Master Password", font=("Arial", 14)).pack(pady=10)
 
     # Create an entry box for the user to type the master password
-    Entry(root, bg="Light Blue", width=30, font=("Arial", 14)).pack(pady=10)
+    master_password_entry = Entry(root, bg="Light Blue", width=30, font=("Arial", 14))
+    master_password_entry.pack(pady=10)
 
-    #Creates a submit button
-    Button(root, text="Submit", pady=15, padx=15).pack()  # No command for now
+    # Saves master password into database
+    def submit_master_password():
 
-if __name__ == "__main__":
-    root = Tk()
-    signup_page(root)
-    root.mainloop()
+        master_password = master_password_entry.get()
 
+        # Validates the input
+        if master_password == "":
+            messagebox.showwarning("Error","Master Password cannot be empty")
+    
+        elif len(master_password) < 6: 
+            messagebox.showwarning("Error","Master Password must be at least 6 characters long")
+
+        # 
+        else:
+            save_master_password(master_password)
+            messagebox.showinfo("Success","Master Password created succedssfully")
+            root.destroy()
+            new_root = Tk()
+            login_page(new_root)
+
+    # Creates a submit button. When clicked, calls submit_master_password()
+    Button(root, text="Submit", pady=15, padx=15, command = submit_master_password).pack()
