@@ -3,7 +3,6 @@ from tkinter import messagebox
 from core.authentication import save_master_password
 from GUI.login_window import login_page
 
-
 def signup_page(root):
     root.title("SafePass - Signup Page")
     root.geometry("450x400")
@@ -26,10 +25,12 @@ def signup_page(root):
         elif len(master_password) < 6: 
             messagebox.showwarning("Error","Master Password must be at least 6 characters long")
 
-        # 
+        # Once validated, uses function for authentication.py to store and hash the master password
         else:
             save_master_password(master_password)
-            messagebox.showinfo("Success","Master Password created succedssfully")
+            messagebox.showinfo("Success","Master Password created successfully")
+
+            # Page is destroyed and login window opens
             root.destroy()
             new_root = Tk()
             login_page(new_root)

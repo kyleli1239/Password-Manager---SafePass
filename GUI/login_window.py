@@ -1,5 +1,7 @@
 from tkinter import *
 from tkinter import messagebox
+from core.authentication import authenticate_master_password
+from GUI.vault_window import vault_page
 
 def login_page(root):
     root.title("SafePass - Login Page")
@@ -8,7 +10,24 @@ def login_page(root):
     Label(root, text="Enter your Master Password", font=("Arial", 14)).pack(pady=10)
 
     # Create an entry box for the user to type the master password
-    Entry(root, bg="Light Blue", width=30, font=("Arial", 14)).pack(pady=10)
+    password_entry = Entry(root, bg="Light Blue", width=30, font=("Arial", 14))
+    password_entry.pack(pady=10)
 
-    # Creates a submit button
-    Button(root, text="Submit", pady=15, padx=15).pack()  # No command for now
+    # Calls the authenticate_master_password function from authentication.py
+    def check_password():
+        entered_password = password_entry.get()
+
+        # If the function returns True, the passwords match and user is authenticated
+        if authenticate_master_password(entered_password) == True:
+            messagebox.showinfo("Success","Login Successful")
+
+            # Page is destroyed and vault window opens
+            root.destroy()
+            new_root = Tk()
+            vault_page(new_root)
+
+        else:
+            messagebox.showerror("Error","Login failed. Incorrest master password")
+
+    # Creates a submit button. When clicked, calls the function authenticate_master_password 
+    Button(root, text="Submit", pady=15, padx=15, command=check_password).pack()
