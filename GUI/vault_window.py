@@ -3,8 +3,13 @@ from tkinter import messagebox
 from core.database import retrieve_entry, delete_entry
 from GUI.add_entry_window import add_entry_page
 from functools import partial
+from cryptography.fernet import Fernet
+from core.encryption import encrypt_text, decrypt_text
 
-def vault_page(root):
+def vault_page(root,key):
+
+    # Creates a fernet object using the key (can be used to encrypt/decrypt)
+    fernet = Fernet(key)
 
     root.title("SafePass - Vault Page")
     root.geometry("1000x600")
@@ -21,6 +26,7 @@ def vault_page(root):
     Label(root, text="Username", font=("Arial", 14)).grid(row=2, column=1, padx=10, pady=5)
     Label(root, text="Password", font=("Arial", 14)).grid(row=2, column=2, padx=10, pady=5)
 
+    # Function that displays all the entries onto the vault page
     def load_entries():
 
         # Calls function to retrieve all the entries
@@ -36,13 +42,19 @@ def vault_page(root):
 
         for entry in data:
 
+            # Retrieves each entry
             website = entry[1]
             username = entry[2]
             password = entry[3]
 
-            Label(root, text=website, font=("Arial", 12)).grid(row=starting_row, column=0, padx=10, pady=5) # Displays website
-            Label(root, text=username, font=("Arial", 12)).grid(row=starting_row, column=1, padx=10, pady=5) # Displays username
-            Label(root, text=password, font=("Arial", 12)).grid(row=starting_row, column=2, padx=10, pady=5) # Displays password
+            # Decrypts website, username, password (encrypted in the table)
+            decrypted_website = decrypt_text(website,fernet)
+            decrypted_username = decrypt_text(username,fernet)
+            decrypted_password = decrypt_text(password, fernet)
+
+            Label(root, text=decrypted_website, font=("Arial", 12)).grid(row=starting_row, column=0, padx=10, pady=5) # Displays website
+            Label(root, text=decrypted_username, font=("Arial", 12)).grid(row=starting_row, column=1, padx=10, pady=5) # Displays username
+            Label(root, text=decrypted_password, font=("Arial", 12)).grid(row=starting_row, column=2, padx=10, pady=5) # Displays password
 
             # Calls function to delete entry and refreshes page
             def delete(entry_id):
@@ -56,11 +68,13 @@ def vault_page(root):
             # Increment starting row
             starting_row = starting_row + 1
 
+    # Function calls add_entry_page and then refreshes the page
     def add():
-        add_entry_page(root)
+        add_entry_page(root, fernet) # Passes the fernet object to add entry page so encryption/decryption can be done
         load_entries()
 
     # Creates a "+" button 
     Button(root, text="+", font=("Arial", 18), pady=15, padx=15, command=add).grid(row=1, column=0, columnspan=3, pady=10)
     
+    # Refreshes page
     load_entries()

@@ -17,14 +17,16 @@ def login_page(root):
     def check_password():
         entered_password = password_entry.get()
 
-        # If the function returns True, the passwords match and user is authenticated
-        if authenticate_master_password(entered_password) == True:
+        key = authenticate_master_password(entered_password)
+
+        # If the key is present, the passwords match and user is authenticated
+        if key:
             messagebox.showinfo("Success","Login Successful")
 
             # Page is destroyed and vault window opens
             root.destroy()
             new_root = Tk()
-            vault_page(new_root)
+            vault_page(new_root,key) # Key is passed to the vault page
 
         else:
             messagebox.showerror("Error","Login failed. Incorrest master password")

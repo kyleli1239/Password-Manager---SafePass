@@ -18,8 +18,9 @@ def initialise_database():
     c.execute(""" 
     CREATE TABLE IF NOT EXISTS master_password(
     master_id INTEGER PRIMARY KEY,
-    master_password TEXT);
-    """) 
+    master_password TEXT,
+    salt BLOB);
+    """)
 
     # Table for password_vault
     c.execute("""
@@ -44,6 +45,7 @@ def add_entry(master_id, website, username, password):
               VALUES (?, ?, ?, ?)""",
               (master_id, website, username, password))
     
+    # Commits changes to database and closes connection
     conn.commit()
     conn.close()
     
@@ -59,13 +61,16 @@ def retrieve_entry():
     rows = c.fetchall()
     return rows
 
+# Function to delete specific entries
 def delete_entry(entry_id):
 
     # Connections to database
     conn = get_connection()
     c = conn.cursor()
 
+    # Deletes row of specific entry id
     c.execute("DELETE FROM password_vault WHERE entry_id = ?", (entry_id,))
     
+    # Commits changes to database and closes connection
     conn.commit()
     conn.close()

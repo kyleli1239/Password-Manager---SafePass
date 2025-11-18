@@ -1,5 +1,7 @@
 import bcrypt
 from core.database import get_connection
+import os
+from core.encryption import derive_key
 
 # Function to hash and store master password in database
 def save_master_password(master_password):
@@ -11,8 +13,11 @@ def save_master_password(master_password):
     # Hash the master password using random salt
     hashed_password = bcrypt.hashpw(master_password.encode(), bcrypt.gensalt())
 
+    # Generates random 16 byte salt
+    generated_salt = os.urandom(16)
+
     # Insert into database
-    c.execute("INSERT INTO master_password (master_password) VALUES (?)", (hashed_password,))
+    c.execute("INSERT INTO master_password (master_password, salt) VALUES (?,?)", (hashed_password,generated_salt))
 
     # Closes connection
     conn.commit()
@@ -38,4 +43,12 @@ def authenticate_master_password(entered_password):
     # Compares entered password with stored hash
     # checkpw automatically salts and hashes the the entered 
     if bcrypt.checkpw(encoded_entered_password,stored_hash):
-        return True                                 
+
+        # Retrieves the salt stored in the master_password table
+        c.execute("SELECT salt FROM master_password")
+        stored_salt = c.fetchone()
+        stored_salt = stored_salt[0]
+
+        # Returns the derived key
+        key = derive_key(entered_password, stored_salt)
+        return key 
