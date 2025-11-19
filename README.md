@@ -8,10 +8,10 @@ The SafePass application allows a single user to securely store their credential
 
 This project requires Python (preferably a later version like Python 3.9 or higher) and the following packages to be installed
 
-'tkinter' – For the GUI interface (usually included with Python standard library)
-'cryptography' – For encryption and decryption
-'bcrypt' – For password hashing
-'sqlite3' – For database management (usually included with Python standard library)
+* 'tkinter' – For the GUI interface (usually included with Python standard library)
+* 'cryptography' – For encryption and decryption
+* 'bcrypt' – For password hashing
+* 'sqlite3' – For database management (usually included with Python standard library)
 
 You can install packages using 'pip install cryptography bcrypt'
 
@@ -19,9 +19,10 @@ You can install packages using 'pip install cryptography bcrypt'
 
 ## Sample Input for Testing
 
+* Run `python main.py` on a terminal. If this does not work, open the main.py file and directly run it for example, in Visual Studio and run in dedicated terminal.
+
 ### 1. Create a new master password
 
-* Run `python main.py`
 * On the signup page, enter your master password 'Password123'.
 * Click the 'submit' button.
 
