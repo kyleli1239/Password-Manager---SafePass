@@ -21,6 +21,8 @@ You can install packages using **'pip install cryptography bcrypt'**
 
 * Run `python main.py` on a terminal/command prompt. If this does not work, either ensure the current directory can view main.py or open the main.py file and directly run it for example, in Visual Studio and run in dedicated terminal. There must be a file called data otherwise the application won't be able to create or find the database.
 
+* If you forget the master password and can't login, delete the SafePass_database.db file located inside Data. This will allow the application to create a new database file and the signup page will be displayed again. (Note that if there is a master password already stored in the database, the signup page won't be displayed as application is intended for a single user)
+
 ### 1. Create a new master password
 
 * On the signup page, enter your master password **'Password123'**.
