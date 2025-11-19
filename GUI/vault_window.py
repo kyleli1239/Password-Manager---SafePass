@@ -1,10 +1,12 @@
 from tkinter import *
-from tkinter import messagebox
+import tkinter as tk
 from core.database import retrieve_entry, delete_entry
 from GUI.add_entry_window import add_entry_page
 from functools import partial
 from cryptography.fernet import Fernet
-from core.encryption import encrypt_text, decrypt_text
+from core.encryption import decrypt_text
+
+
 
 def vault_page(root,key):
 
@@ -70,11 +72,19 @@ def vault_page(root,key):
 
     # Function calls add_entry_page and then refreshes the page
     def add():
-        add_entry_page(root, fernet) # Passes the fernet object to add entry page so encryption/decryption can be done
-        load_entries()
+
+        # Temporarily disables button
+        add_button.config(state=tk.DISABLED)
+
+        win = add_entry_page(root, fernet) # Passes the fernet object to add entry page so encryption/decryption can be done
+        root.wait_window(win) # Waits until the add entry window is closed
+        load_entries() #  Once closed, page is refreshed
+
+        add_button.config(state=tk.NORMAL)
 
     # Creates a "+" button 
-    Button(root, text="+", font=("Arial", 18), pady=15, padx=15, command=add).grid(row=1, column=0, columnspan=3, pady=10)
+    add_button = Button(root, text="+", font=("Arial", 18), pady=15, padx=15, command=add)
+    add_button.grid(row=1, column=0, columnspan=3, pady=10)
     
     # Refreshes page
     load_entries()

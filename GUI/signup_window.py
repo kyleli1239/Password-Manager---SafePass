@@ -19,7 +19,7 @@ def signup_page(root):
         master_password = master_password_entry.get()
 
         # Validates the input
-        if master_password == "":
+        if master_password.strip() == "":
             messagebox.showwarning("Error","Master Password cannot be empty")
     
         elif len(master_password) < 6: 
