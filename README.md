@@ -19,7 +19,7 @@ You can install packages using **'pip install cryptography bcrypt'**
 
 ## Sample Input for Testing
 
-* Run `python main.py` on a terminal. If this does not work, open the main.py file and directly run it for example, in Visual Studio and run in dedicated terminal.
+* Run `python main.py` on a terminal/command prompt. If this does not work, either ensure the current directory can view main.py or open the main.py file and directly run it for example, in Visual Studio and run in dedicated terminal. There must be a file called data otherwise the application won't be able to create or find the database.
 
 ### 1. Create a new master password
 
